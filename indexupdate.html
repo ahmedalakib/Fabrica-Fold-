@@ -1,0 +1,1267 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Fabrica Fold — Street Collection</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow:wght@400;500;600;700&family=Barlow+Condensed:wght@600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --black:#080808;--black2:#111;--black3:#181818;--black4:#1e1e1e;
+  --yellow:#f5c518;--yellow2:#d4a800;--yellow-glow:rgba(245,197,24,0.15);
+  --yellow-dim:rgba(245,197,24,0.08);--white:#fff;--off:#e8e8e8;
+  --muted:#666;--muted2:#999;
+  --border:rgba(245,197,24,0.2);--border-dim:rgba(245,197,24,0.08);
+  --red:#e74c3c;--green:#27ae60;
+}
+*{margin:0;padding:0;box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+body{background:var(--black);color:var(--white);font-family:'Barlow',sans-serif;font-size:16px;line-height:1.6;overflow-x:hidden;}
+
+/* ── SCROLLBAR ── */
+::-webkit-scrollbar{width:4px;}
+::-webkit-scrollbar-track{background:var(--black2);}
+::-webkit-scrollbar-thumb{background:var(--yellow);border-radius:2px;}
+
+/* ── NAV ── */
+nav{
+  position:fixed;top:0;left:0;right:0;z-index:2000;
+  display:flex;align-items:center;justify-content:space-between;
+  padding:10px 40px;
+  background:rgba(8,8,8,0.97);backdrop-filter:blur(20px);
+  border-bottom:1px solid var(--border);
+}
+.nav-logo{height:50px;width:auto;cursor:pointer;}
+.nav-links{display:flex;gap:28px;align-items:center;}
+.nav-links a{color:var(--muted2);text-decoration:none;font-size:12px;font-weight:600;letter-spacing:1.5px;text-transform:uppercase;transition:color 0.2s;}
+.nav-links a:hover{color:var(--yellow);}
+.nav-right{display:flex;align-items:center;gap:16px;}
+.cart-btn{
+  position:relative;background:var(--yellow);color:var(--black);
+  border:none;padding:10px 20px;border-radius:3px;cursor:pointer;
+  font-family:'Bebas Neue',sans-serif;font-size:18px;letter-spacing:2px;
+  display:flex;align-items:center;gap:8px;transition:background 0.2s;
+}
+.cart-btn:hover{background:var(--yellow2);}
+.cart-count{
+  position:absolute;top:-8px;right:-8px;
+  background:var(--red);color:#fff;width:20px;height:20px;
+  border-radius:50%;font-size:11px;font-weight:700;
+  display:flex;align-items:center;justify-content:center;
+  font-family:'Barlow',sans-serif;
+  display:none;
+}
+.cart-count.show{display:flex;}
+.hamburger{display:none;flex-direction:column;gap:5px;cursor:pointer;padding:4px;}
+.hamburger span{width:24px;height:2px;background:var(--yellow);border-radius:2px;transition:all 0.3s;}
+.mobile-menu{
+  display:none;position:fixed;top:72px;left:0;right:0;
+  background:rgba(8,8,8,0.99);padding:20px 24px;
+  border-bottom:1px solid var(--border);z-index:1999;
+  flex-direction:column;gap:4px;
+}
+.mobile-menu a{color:var(--white);text-decoration:none;font-size:15px;font-weight:600;letter-spacing:1px;text-transform:uppercase;padding:12px 0;border-bottom:1px solid var(--border-dim);display:block;}
+.mobile-menu a:hover{color:var(--yellow);}
+.mobile-menu.open{display:flex;}
+
+/* ── HERO ── */
+.hero{
+  min-height:100vh;display:flex;flex-direction:column;
+  align-items:center;justify-content:center;text-align:center;
+  padding:120px 24px 80px;position:relative;overflow:hidden;
+  background:radial-gradient(ellipse 80% 60% at 50% 50%, rgba(245,197,24,0.05) 0%,transparent 70%);
+}
+.hero-logo{width:min(300px,70vw);margin-bottom:20px;filter:drop-shadow(0 0 60px rgba(245,197,24,0.3));animation:float 3s ease-in-out infinite;}
+@keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-8px)}}
+.hero-label{font-size:11px;letter-spacing:5px;text-transform:uppercase;color:var(--yellow);margin-bottom:14px;font-weight:700;}
+.hero-title{font-family:'Bebas Neue',sans-serif;font-size:clamp(48px,12vw,120px);letter-spacing:4px;line-height:0.88;margin-bottom:20px;}
+.hero-title span{color:var(--yellow);}
+.hero-sub{font-size:15px;color:var(--muted2);margin-bottom:32px;max-width:440px;line-height:1.7;}
+.hero-price-strip{
+  display:inline-flex;align-items:center;gap:20px;
+  background:var(--yellow);color:var(--black);
+  font-family:'Bebas Neue',sans-serif;font-size:22px;letter-spacing:2px;
+  padding:12px 36px;border-radius:3px;margin-bottom:36px;
+}
+.hero-btns{display:flex;gap:12px;flex-wrap:wrap;justify-content:center;}
+.btn{display:inline-block;padding:14px 32px;font-family:'Barlow Condensed',sans-serif;font-size:15px;font-weight:700;letter-spacing:2px;text-transform:uppercase;text-decoration:none;border-radius:3px;border:none;cursor:pointer;transition:all 0.2s;}
+.btn-yellow{background:var(--yellow);color:var(--black);}
+.btn-yellow:hover{background:var(--yellow2);transform:translateY(-1px);}
+.btn-outline{background:transparent;color:var(--yellow);border:2px solid var(--yellow);}
+.btn-outline:hover{background:var(--yellow-dim);}
+.scroll-hint{position:absolute;bottom:24px;left:50%;transform:translateX(-50%);font-size:10px;letter-spacing:4px;color:rgba(245,197,24,0.4);text-transform:uppercase;animation:bob 2s infinite;}
+@keyframes bob{0%,100%{transform:translateX(-50%) translateY(0)}50%{transform:translateX(-50%) translateY(8px)}}
+
+/* ── STATS BAR ── */
+.stats-bar{
+  background:var(--yellow);color:var(--black);
+  display:flex;justify-content:center;gap:0;flex-wrap:wrap;
+}
+.stat{
+  padding:18px 40px;text-align:center;
+  border-right:1px solid rgba(0,0,0,0.15);flex:1;min-width:140px;
+}
+.stat:last-child{border-right:none;}
+.stat-num{font-family:'Bebas Neue',sans-serif;font-size:32px;letter-spacing:2px;display:block;}
+.stat-label{font-size:11px;font-weight:700;letter-spacing:2px;text-transform:uppercase;opacity:0.7;}
+
+/* ── SECTIONS ── */
+section{padding:90px 36px;}
+.sec-wrap{max-width:1200px;margin:0 auto;}
+.sec-label{font-size:10px;letter-spacing:5px;text-transform:uppercase;color:var(--yellow);margin-bottom:10px;font-weight:700;}
+.sec-title{font-family:'Bebas Neue',sans-serif;font-size:clamp(36px,6vw,68px);letter-spacing:2px;line-height:1;margin-bottom:44px;}
+
+/* ── FILTER BAR ── */
+#shop{background:var(--black2);}
+.filter-bar{display:flex;gap:10px;margin-bottom:36px;flex-wrap:wrap;align-items:center;}
+.filter-btn{
+  padding:8px 20px;border-radius:3px;border:1px solid var(--border);
+  background:transparent;color:var(--muted2);font-size:12px;font-weight:700;
+  letter-spacing:1.5px;text-transform:uppercase;cursor:pointer;transition:all 0.2s;
+}
+.filter-btn:hover{border-color:var(--yellow);color:var(--yellow);}
+.filter-btn.active{background:var(--yellow);color:var(--black);border-color:var(--yellow);}
+.filter-right{margin-left:auto;display:flex;align-items:center;gap:8px;color:var(--muted);font-size:13px;}
+
+/* ── PRODUCTS GRID ── */
+.products-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:2px;}
+
+.product-card{
+  background:var(--black);position:relative;overflow:hidden;
+  cursor:pointer;transition:all 0.3s;border:1px solid transparent;
+  display:flex;flex-direction:column;
+}
+.product-card:hover{border-color:var(--yellow);transform:translateY(-2px);box-shadow:0 8px 40px rgba(245,197,24,0.1);}
+.product-card.coming-soon{opacity:0.6;cursor:default;}
+.product-card.coming-soon:hover{transform:none;border-color:transparent;box-shadow:none;}
+
+.product-imgs{position:relative;width:100%;aspect-ratio:3/4;overflow:hidden;background:#111;flex-shrink:0;}
+.product-imgs img{width:100%;height:100%;object-fit:cover;display:block;position:absolute;top:0;left:0;transition:all 0.5s ease;}
+.img-front{z-index:1;opacity:1;}
+.img-back{z-index:2;opacity:0;}
+.product-card:hover .img-front{transform:scale(1.05);}
+.product-card:hover .img-back{opacity:1;}
+
+.product-badge{
+  position:absolute;top:12px;left:12px;z-index:5;
+  background:var(--yellow);color:var(--black);
+  font-size:9px;font-weight:700;letter-spacing:2px;text-transform:uppercase;
+  padding:4px 10px;border-radius:2px;
+}
+.stock-badge{
+  position:absolute;top:12px;right:12px;z-index:5;
+  font-size:9px;font-weight:700;letter-spacing:1px;text-transform:uppercase;
+  padding:4px 10px;border-radius:2px;
+}
+.in-stock{background:var(--green);color:#fff;}
+.low-stock{background:#e67e22;color:#fff;}
+.coming-soon-badge{background:var(--black2);color:var(--yellow);border:1px solid var(--border);}
+
+.quick-btns{
+  position:absolute;bottom:0;left:0;right:0;z-index:6;
+  background:rgba(8,8,8,0.9);backdrop-filter:blur(8px);
+  padding:14px 16px;display:flex;gap:8px;
+  transform:translateY(100%);transition:transform 0.28s ease;
+}
+.product-card:hover .quick-btns{transform:translateY(0);}
+.product-card.coming-soon:hover .quick-btns{transform:translateY(100%);}
+
+.btn-cart{
+  flex:1;background:var(--yellow);color:var(--black);border:none;
+  padding:10px;font-family:'Bebas Neue',sans-serif;font-size:16px;letter-spacing:1.5px;
+  border-radius:3px;cursor:pointer;transition:background 0.2s;
+}
+.btn-cart:hover{background:var(--yellow2);}
+.btn-wa{
+  background:#25D366;color:#fff;border:none;
+  padding:10px 14px;border-radius:3px;cursor:pointer;transition:opacity 0.2s;
+  display:flex;align-items:center;justify-content:center;
+  font-size:18px;
+}
+.btn-wa:hover{opacity:0.85;}
+
+.product-info{padding:16px 20px 20px;flex:1;display:flex;flex-direction:column;border-top:1px solid var(--border-dim);}
+.product-name{font-family:'Bebas Neue',sans-serif;font-size:22px;letter-spacing:2px;margin-bottom:4px;}
+.product-detail{font-size:12px;color:var(--muted2);margin-bottom:12px;line-height:1.5;flex:1;}
+.product-footer{display:flex;align-items:center;justify-content:space-between;gap:8px;}
+.product-price{font-family:'Bebas Neue',sans-serif;font-size:30px;color:var(--yellow);}
+.product-old-price{font-size:13px;color:var(--muted);text-decoration:line-through;margin-left:4px;}
+
+/* COMING SOON CARD */
+.cs-img{width:100%;aspect-ratio:3/4;background:linear-gradient(135deg,var(--black3),var(--black4));display:flex;flex-direction:column;align-items:center;justify-content:center;gap:12px;}
+.cs-icon{font-size:48px;opacity:0.4;}
+.cs-text{font-family:'Bebas Neue',sans-serif;font-size:20px;letter-spacing:3px;color:var(--yellow);opacity:0.6;}
+
+/* ── PRODUCT MODAL ── */
+.modal-overlay{
+  position:fixed;inset:0;background:rgba(0,0,0,0.92);z-index:3000;
+  display:none;align-items:center;justify-content:center;padding:20px;
+  backdrop-filter:blur(4px);
+}
+.modal-overlay.open{display:flex;}
+.modal{
+  background:var(--black2);border:1px solid var(--border);border-radius:4px;
+  max-width:900px;width:100%;max-height:90vh;overflow-y:auto;
+  display:grid;grid-template-columns:1fr 1fr;position:relative;
+}
+.modal-close{
+  position:absolute;top:16px;right:16px;z-index:10;
+  background:var(--yellow);color:var(--black);border:none;
+  width:36px;height:36px;border-radius:50%;cursor:pointer;font-size:18px;
+  display:flex;align-items:center;justify-content:center;font-weight:700;
+  transition:background 0.2s;
+}
+.modal-close:hover{background:var(--yellow2);}
+.modal-imgs{position:relative;overflow:hidden;}
+.modal-img{width:100%;height:100%;object-fit:cover;display:block;transition:opacity 0.3s;cursor:pointer;}
+.modal-img-thumb{
+  position:absolute;bottom:12px;left:50%;transform:translateX(-50%);
+  display:flex;gap:6px;z-index:5;
+}
+.thumb{
+  width:40px;height:40px;border-radius:2px;overflow:hidden;cursor:pointer;
+  border:2px solid transparent;transition:border-color 0.2s;opacity:0.7;
+}
+.thumb.active{border-color:var(--yellow);opacity:1;}
+.thumb img{width:100%;height:100%;object-fit:cover;}
+.modal-info{padding:36px 32px;display:flex;flex-direction:column;}
+.modal-badge{font-size:10px;font-weight:700;letter-spacing:3px;text-transform:uppercase;color:var(--yellow);margin-bottom:10px;}
+.modal-title{font-family:'Bebas Neue',sans-serif;font-size:40px;letter-spacing:2px;line-height:1;margin-bottom:8px;}
+.modal-price{font-family:'Bebas Neue',sans-serif;font-size:48px;color:var(--yellow);line-height:1;margin-bottom:20px;}
+.modal-desc{font-size:14px;color:var(--muted2);line-height:1.7;margin-bottom:24px;}
+.modal-stock{display:flex;align-items:center;gap:8px;margin-bottom:20px;}
+.stock-dot{width:8px;height:8px;border-radius:50%;}
+.stock-dot.green{background:var(--green);}
+.stock-dot.orange{background:#e67e22;}
+.stock-label{font-size:13px;font-weight:600;}
+.modal-details{background:var(--black3);border-radius:3px;padding:16px;margin-bottom:24px;}
+.modal-details-row{display:flex;justify-content:space-between;padding:6px 0;border-bottom:1px solid var(--border-dim);font-size:13px;}
+.modal-details-row:last-child{border-bottom:none;}
+.modal-details-row span:first-child{color:var(--muted2);}
+.modal-details-row span:last-child{font-weight:600;color:var(--yellow);}
+.modal-qty{display:flex;align-items:center;gap:12px;margin-bottom:20px;}
+.modal-qty label{font-size:11px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--muted2);}
+.qty-control{display:flex;align-items:center;gap:0;border:1px solid var(--border);border-radius:3px;overflow:hidden;}
+.qty-btn{
+  background:var(--black3);color:var(--yellow);border:none;
+  width:36px;height:36px;cursor:pointer;font-size:18px;font-weight:700;
+  transition:background 0.2s;display:flex;align-items:center;justify-content:center;
+}
+.qty-btn:hover{background:var(--yellow-dim);}
+.qty-val{
+  width:44px;height:36px;display:flex;align-items:center;justify-content:center;
+  font-size:15px;font-weight:600;border-left:1px solid var(--border);border-right:1px solid var(--border);
+  background:var(--black2);
+}
+.modal-actions{display:flex;flex-direction:column;gap:10px;margin-top:auto;}
+.btn-add-cart{
+  width:100%;background:var(--yellow);color:var(--black);border:none;
+  padding:14px;font-family:'Bebas Neue',sans-serif;font-size:20px;letter-spacing:2px;
+  border-radius:3px;cursor:pointer;transition:background 0.2s;
+}
+.btn-add-cart:hover{background:var(--yellow2);}
+.btn-wa-modal{
+  width:100%;background:#25D366;color:#fff;border:none;
+  padding:14px;font-family:'Bebas Neue',sans-serif;font-size:20px;letter-spacing:2px;
+  border-radius:3px;cursor:pointer;transition:opacity 0.2s;
+  display:flex;align-items:center;justify-content:center;gap:10px;
+}
+.btn-wa-modal:hover{opacity:0.88;}
+
+/* ── CART SIDEBAR ── */
+.cart-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.6);z-index:2500;display:none;}
+.cart-overlay.open{display:block;}
+.cart-sidebar{
+  position:fixed;top:0;right:0;bottom:0;width:min(400px,100vw);
+  background:var(--black2);border-left:1px solid var(--border);
+  z-index:2600;transform:translateX(100%);transition:transform 0.3s ease;
+  display:flex;flex-direction:column;
+}
+.cart-sidebar.open{transform:translateX(0);}
+.cart-header{
+  padding:20px 24px;border-bottom:1px solid var(--border-dim);
+  display:flex;align-items:center;justify-content:space-between;
+}
+.cart-header h3{font-family:'Bebas Neue',sans-serif;font-size:24px;letter-spacing:2px;color:var(--yellow);}
+.cart-close{background:none;border:none;color:var(--muted2);font-size:22px;cursor:pointer;transition:color 0.2s;}
+.cart-close:hover{color:var(--white);}
+.cart-items{flex:1;overflow-y:auto;padding:16px 24px;}
+.cart-empty{text-align:center;padding:60px 20px;}
+.cart-empty-icon{font-size:48px;margin-bottom:16px;opacity:0.4;}
+.cart-empty p{color:var(--muted2);font-size:14px;}
+.cart-item{
+  display:flex;gap:14px;padding:14px 0;
+  border-bottom:1px solid var(--border-dim);
+}
+.cart-item-img{width:64px;height:80px;object-fit:cover;border-radius:2px;flex-shrink:0;}
+.cart-item-info{flex:1;}
+.cart-item-name{font-family:'Bebas Neue',sans-serif;font-size:16px;letter-spacing:1px;margin-bottom:2px;}
+.cart-item-price{font-size:14px;color:var(--yellow);font-weight:600;margin-bottom:6px;}
+.cart-item-qty{display:flex;align-items:center;gap:8px;}
+.ciq{background:var(--black3);border:1px solid var(--border-dim);color:var(--white);width:28px;height:28px;border-radius:2px;cursor:pointer;font-size:14px;font-weight:700;display:flex;align-items:center;justify-content:center;}
+.ciq:hover{border-color:var(--yellow);color:var(--yellow);}
+.ciq-val{font-size:14px;font-weight:600;min-width:20px;text-align:center;}
+.cart-item-remove{background:none;border:none;color:var(--muted);cursor:pointer;font-size:16px;transition:color 0.2s;align-self:flex-start;}
+.cart-item-remove:hover{color:var(--red);}
+.cart-footer{padding:20px 24px;border-top:1px solid var(--border-dim);}
+.cart-total-row{display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;}
+.cart-total-label{font-size:14px;color:var(--muted2);}
+.cart-total-val{font-family:'Bebas Neue',sans-serif;font-size:32px;color:var(--yellow);}
+.btn-checkout{
+  width:100%;background:var(--yellow);color:var(--black);border:none;
+  padding:16px;font-family:'Bebas Neue',sans-serif;font-size:22px;letter-spacing:2px;
+  border-radius:3px;cursor:pointer;transition:background 0.2s;margin-bottom:10px;
+}
+.btn-checkout:hover{background:var(--yellow2);}
+.btn-checkout-wa{
+  width:100%;background:#25D366;color:#fff;border:none;
+  padding:14px;font-family:'Bebas Neue',sans-serif;font-size:20px;letter-spacing:2px;
+  border-radius:3px;cursor:pointer;transition:opacity 0.2s;
+  display:flex;align-items:center;justify-content:center;gap:10px;
+}
+.btn-checkout-wa:hover{opacity:0.88;}
+
+/* ── REVIEWS ── */
+#reviews{background:var(--black);}
+.reviews-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:16px;margin-bottom:40px;}
+.review-card{
+  background:var(--black2);border:1px solid var(--border-dim);border-radius:3px;
+  padding:22px;transition:border-color 0.2s;
+}
+.review-card:hover{border-color:var(--border);}
+.review-top{display:flex;align-items:center;gap:12px;margin-bottom:14px;}
+.review-avatar{
+  width:42px;height:42px;border-radius:50%;background:var(--yellow);
+  display:flex;align-items:center;justify-content:center;
+  font-family:'Bebas Neue',sans-serif;font-size:20px;color:var(--black);flex-shrink:0;
+}
+.review-meta{}
+.review-name{font-size:14px;font-weight:700;}
+.review-date{font-size:11px;color:var(--muted2);}
+.review-stars{color:var(--yellow);font-size:14px;margin-bottom:6px;letter-spacing:1px;}
+.review-product{font-size:11px;color:var(--yellow);font-weight:700;letter-spacing:1px;text-transform:uppercase;margin-bottom:8px;}
+.review-text{font-size:13px;color:var(--muted2);line-height:1.6;}
+
+.add-review-box{
+  background:var(--black2);border:1px solid var(--border);border-radius:3px;
+  padding:28px;max-width:560px;
+}
+.add-review-box h3{font-family:'Bebas Neue',sans-serif;font-size:28px;letter-spacing:2px;color:var(--yellow);margin-bottom:20px;}
+.star-select{display:flex;gap:6px;margin-bottom:16px;}
+.star-btn{font-size:24px;cursor:pointer;opacity:0.3;transition:opacity 0.2s;background:none;border:none;}
+.star-btn.lit{opacity:1;}
+.rform-group{display:flex;flex-direction:column;gap:6px;margin-bottom:14px;}
+.rform-group label{font-size:10px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--yellow);}
+.rform-group input,.rform-group select,.rform-group textarea{
+  background:var(--black3);border:1px solid rgba(245,197,24,0.2);color:var(--white);
+  padding:12px 14px;font-family:'Barlow',sans-serif;font-size:14px;border-radius:3px;
+  outline:none;transition:border-color 0.2s;width:100%;-webkit-appearance:none;
+}
+.rform-group input:focus,.rform-group select:focus,.rform-group textarea:focus{border-color:var(--yellow);}
+.rform-group textarea{resize:vertical;min-height:80px;}
+.rform-group select option{background:var(--black2);}
+
+/* ── CHECKOUT MODAL ── */
+.checkout-overlay{
+  position:fixed;inset:0;background:rgba(0,0,0,0.94);z-index:4000;
+  display:none;align-items:center;justify-content:center;padding:20px;
+  backdrop-filter:blur(6px);
+}
+.checkout-overlay.open{display:flex;}
+.checkout-box{
+  background:var(--black2);border:1px solid var(--border);border-radius:4px;
+  max-width:560px;width:100%;max-height:90vh;overflow-y:auto;padding:36px;position:relative;
+}
+.checkout-box h2{font-family:'Bebas Neue',sans-serif;font-size:36px;letter-spacing:2px;color:var(--yellow);margin-bottom:24px;}
+.co-close{position:absolute;top:16px;right:16px;background:var(--yellow);color:var(--black);border:none;width:34px;height:34px;border-radius:50%;cursor:pointer;font-size:16px;font-weight:700;display:flex;align-items:center;justify-content:center;transition:background 0.2s;}
+.co-close:hover{background:var(--yellow2);}
+.co-summary{background:var(--black3);border-radius:3px;padding:16px;margin-bottom:24px;}
+.co-summary-title{font-size:10px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--yellow);margin-bottom:12px;}
+.co-item{display:flex;justify-content:space-between;padding:5px 0;font-size:13px;border-bottom:1px solid var(--border-dim);}
+.co-item:last-child{border-bottom:none;}
+.co-total{display:flex;justify-content:space-between;margin-top:12px;padding-top:12px;border-top:1px solid var(--border);}
+.co-total span:first-child{font-size:13px;color:var(--muted2);}
+.co-total span:last-child{font-family:'Bebas Neue',sans-serif;font-size:28px;color:var(--yellow);}
+.fg2{display:flex;flex-direction:column;gap:6px;margin-bottom:14px;}
+.fg2 label{font-size:10px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--yellow);}
+.fg2 input,.fg2 select,.fg2 textarea{background:var(--black3);border:1px solid rgba(245,197,24,0.2);color:var(--white);padding:13px 15px;font-family:'Barlow',sans-serif;font-size:15px;border-radius:3px;outline:none;transition:border-color 0.2s;width:100%;-webkit-appearance:none;}
+.fg2 input:focus,.fg2 select:focus,.fg2 textarea:focus{border-color:var(--yellow);}
+.fg2 textarea{resize:vertical;min-height:75px;}
+.fg2 select option{background:var(--black2);}
+.pay-opts{display:flex;gap:10px;margin-bottom:20px;}
+.pay-opt{flex:1;border:1px solid rgba(245,197,24,0.2);border-radius:3px;padding:14px;cursor:pointer;text-align:center;transition:all 0.2s;background:var(--black3);}
+.pay-opt:hover{border-color:rgba(245,197,24,0.5);}
+.pay-opt.active{border-color:var(--yellow);background:var(--yellow-dim);}
+.pay-opt .picon{display:block;font-size:24px;margin-bottom:6px;}
+.pay-opt .pname{font-size:13px;font-weight:700;color:var(--white);}
+.pay-opt .pdetail{font-size:11px;color:var(--muted2);margin-top:2px;}
+.bkbadge{display:inline-block;background:#E2136E;border-radius:3px;padding:4px 10px;font-size:12px;font-weight:800;color:#fff;font-family:Arial,sans-serif;}
+.btn-place{width:100%;background:var(--yellow);color:var(--black);border:none;padding:16px;font-family:'Bebas Neue',sans-serif;font-size:22px;letter-spacing:3px;border-radius:3px;cursor:pointer;transition:background 0.2s;}
+.btn-place:hover{background:var(--yellow2);}
+.btn-place:disabled{opacity:0.5;cursor:not-allowed;}
+
+/* ── TOAST ── */
+.toast{position:fixed;bottom:28px;left:50%;transform:translateX(-50%) translateY(20px);background:var(--yellow);color:var(--black);padding:12px 24px;border-radius:3px;font-size:14px;font-weight:700;letter-spacing:1px;z-index:5000;opacity:0;transition:all 0.3s;}
+.toast.show{transform:translateX(-50%) translateY(0);opacity:1;}
+
+/* ── FLOAT WA ── */
+.float-wa{position:fixed;bottom:28px;right:28px;background:#25D366;color:#fff;width:58px;height:58px;border-radius:50%;display:flex;align-items:center;justify-content:center;text-decoration:none;box-shadow:0 4px 12px rgba(0,0,0,0.15);transition:transform 0.2s;z-index:1500;}
+.float-wa:hover{transform:scale(1.1);}
+
+/* ── CONTACT ── */
+#contact{background:var(--black2);border-top:1px solid var(--border-dim);}
+.channels{display:flex;flex-wrap:wrap;gap:12px;}
+.ch{display:flex;align-items:center;gap:14px;background:var(--black3);border:1px solid var(--border-dim);border-radius:3px;padding:16px 22px;text-decoration:none;color:var(--white);transition:all 0.2s;}
+.ch:hover{border-color:var(--yellow);background:var(--yellow-dim);}
+.ch-icon{width:38px;height:38px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0;}
+.ch-wa{background:#25D366;}.ch-fb{background:#1877F2;}.ch-ig{background:linear-gradient(135deg,#f09433,#e6683c,#dc2743,#cc2366,#bc1888);}.ch-bk{background:#E2136E;}.ch-ph{background:#333;}
+.ch-name{font-size:10px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--yellow);display:block;margin-bottom:2px;}
+.ch-val{font-size:14px;font-weight:600;color:var(--white);}
+
+/* ── FOOTER ── */
+footer{background:var(--black);padding:40px 36px;border-top:1px solid var(--border);}
+.footer-inner{max-width:1200px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:20px;}
+.foot-logo{height:44px;}
+.foot-links{display:flex;gap:20px;flex-wrap:wrap;}
+.foot-links a{font-size:12px;color:var(--muted);text-decoration:none;letter-spacing:1px;text-transform:uppercase;transition:color 0.2s;}
+.foot-links a:hover{color:var(--yellow);}
+.foot-note{font-size:12px;color:var(--muted);}
+
+/* ── MOBILE ── */
+@media(max-width:768px){
+  nav{padding:10px 18px;}
+  .nav-links{display:none;}
+  .hamburger{display:flex;}
+  section{padding:60px 18px;}
+  .hero{padding:100px 18px 60px;}
+  .modal{grid-template-columns:1fr;}
+  .modal-imgs{max-height:300px;}
+  .modal-img{height:300px;}
+  .checkout-box{padding:24px 18px;}
+  .pay-opts{flex-direction:column;}
+  footer{padding:28px 18px;}
+  .float-wa{bottom:18px;right:18px;}
+  .stat{min-width:50%;}
+}
+@media(max-width:500px){
+  .cart-sidebar{width:100vw;}
+}
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <div class="nav-logo" style="font-family:'Bebas Neue';font-size:28px;color:var(--yellow);letter-spacing:3px;">FABRICA</div>
+  <div class="nav-links">
+    <a href="#shop">Shop</a>
+    <a href="#reviews">Reviews</a>
+    <a href="#contact">Contact</a>
+  </div>
+  <div class="nav-right">
+    <button class="cart-btn" onclick="openCart()">
+      🛒 Cart
+      <span class="cart-count" id="cartCount">0</span>
+    </button>
+    <div class="hamburger" onclick="toggleMenu()"><span></span><span></span><span></span></div>
+  </div>
+</nav>
+
+<div class="mobile-menu" id="mobileMenu">
+  <a href="#shop" onclick="closeMenu()">Shop</a>
+  <a href="#reviews" onclick="closeMenu()">Reviews</a>
+  <a href="#contact" onclick="closeMenu()">Contact</a>
+  <a href="#shop" onclick="closeMenu()" style="color:var(--yellow);">→ Shop All Tees</a>
+</div>
+
+<!-- HERO -->
+<section class="hero" id="home">
+  <div style="font-family:'Bebas Neue';font-size:60px;color:var(--yellow);letter-spacing:4px;margin-bottom:20px;">FABRICA</div>
+  <div class="hero-label">Dhaka Street Collection 2025</div>
+  <div class="hero-title">Street.<br><span>Bold.</span><br>Raw.</div>
+  <p class="hero-sub">Premium graphic tees designed for the streets of Dhaka. Limited pieces. Unbeatable price.</p>
+  <div class="hero-price-strip">🔥 All Tees — Only ৳350</div>
+  <div class="hero-btns">
+    <a href="#shop" class="btn btn-yellow">Shop Now</a>
+    <a href="#reviews" class="btn btn-outline">See Reviews</a>
+  </div>
+  <div class="scroll-hint">↓ scroll to shop</div>
+</section>
+
+<!-- STATS BAR -->
+<div class="stats-bar">
+  <div class="stat"><span class="stat-num">4</span><span class="stat-label">Tees Available</span></div>
+  <div class="stat"><span class="stat-num">৳350</span><span class="stat-label">Only One Price</span></div>
+  <div class="stat"><span class="stat-num" id="soldCount">47+</span><span class="stat-label">Sold This Month</span></div>
+  <div class="stat"><span class="stat-num">100%</span><span class="stat-label">COD Available</span></div>
+</div>
+
+<!-- SHOP -->
+<section id="shop">
+  <div class="sec-wrap">
+    <div class="sec-label">The Collection</div>
+    <div class="sec-title">Shop All Tees</div>
+
+    <div class="filter-bar">
+      <button class="filter-btn active" onclick="filterProducts('all',this)">All</button>
+      <button class="filter-btn" onclick="filterProducts('street',this)">Street</button>
+      <button class="filter-btn" onclick="filterProducts('embroidery',this)">Embroidery</button>
+      <button class="filter-btn" onclick="filterProducts('f1',this)">F1</button>
+      <button class="filter-btn" onclick="filterProducts('minimal',this)">Minimal</button>
+      <div class="filter-right"><span id="productCount">4 products</span></div>
+    </div>
+
+    <div class="products-grid" id="productsGrid"></div>
+  </div>
+</section>
+
+<!-- PRODUCT MODAL -->
+<div class="modal-overlay" id="modalOverlay">
+  <div class="modal">
+    <button class="modal-close" onclick="closeModal()">✕</button>
+    <div class="modal-imgs">
+      <img class="modal-img" id="modalImg" src="" alt="">
+      <div class="modal-img-thumb" id="modalThumbs"></div>
+    </div>
+    <div class="modal-info">
+      <div class="modal-badge" id="modalBadge"></div>
+      <div class="modal-title" id="modalTitle"></div>
+      <div class="modal-price" id="modalPrice"></div>
+      <div class="modal-desc" id="modalDesc"></div>
+      <div class="modal-stock" id="modalStock"></div>
+      <div class="modal-details" id="modalDetails"></div>
+      <div class="modal-qty">
+        <label>Quantity</label>
+        <div class="qty-control">
+          <button class="qty-btn" onclick="decQty()">−</button>
+          <div class="qty-val" id="qtyVal">1</div>
+          <button class="qty-btn" onclick="incQty()">+</button>
+        </div>
+      </div>
+      <div class="modal-actions">
+        <button class="btn-add-cart" id="modalAddBtn" onclick="addToCartFromModal()">ADD TO CART</button>
+        <button class="btn-wa-modal" onclick="contactWhatsApp()">
+          <span>💬</span> Ask On WhatsApp
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- CART SIDEBAR -->
+<div class="cart-overlay" id="cartOverlay" onclick="closeCart()"></div>
+<div class="cart-sidebar" id="cartSidebar">
+  <div class="cart-header">
+    <h3>Cart</h3>
+    <button class="cart-close" onclick="closeCart()">✕</button>
+  </div>
+  <div class="cart-items" id="cartItems">
+    <div class="cart-empty">
+      <div class="cart-empty-icon">🛒</div>
+      <p>Your cart is empty</p>
+    </div>
+  </div>
+  <div class="cart-footer">
+    <div class="cart-total-row">
+      <span class="cart-total-label">TOTAL</span>
+      <span class="cart-total-val" id="cartTotal">৳0</span>
+    </div>
+    <button class="btn-checkout" onclick="openCheckout()">CHECKOUT</button>
+    <button class="btn-checkout-wa" onclick="sendCartWhatsApp()">
+      <span>💬</span> Order Via WhatsApp
+    </button>
+  </div>
+</div>
+
+<!-- CHECKOUT MODAL -->
+<div class="checkout-overlay" id="checkoutOverlay">
+  <div class="checkout-box">
+    <button class="co-close" onclick="closeCheckout()">✕</button>
+    <h2>Order Summary</h2>
+    <div class="co-summary">
+      <div class="co-summary-title">Items</div>
+      <div id="checkoutItems"></div>
+      <div class="co-total">
+        <span>TOTAL</span>
+        <span id="checkoutTotal">৳0</span>
+      </div>
+    </div>
+    <form id="checkoutForm">
+      <div class="fg2">
+        <label>Full Name *</label>
+        <input type="text" id="coName" required placeholder="Your full name">
+      </div>
+      <div class="fg2">
+        <label>Phone Number *</label>
+        <input type="text" id="coPhone" required placeholder="Your phone number">
+      </div>
+      <div class="fg2">
+        <label>Delivery Address *</label>
+        <textarea id="coAddress" required placeholder="Your delivery address"></textarea>
+      </div>
+      <div class="fg2">
+        <label>Payment Method *</label>
+        <div class="pay-opts">
+          <div class="pay-opt active" data-method="cod" onclick="selectPayment(this)">
+            <span class="picon">💵</span>
+            <span class="pname">Cash on Delivery</span>
+            <span class="pdetail">Pay when received</span>
+          </div>
+          <div class="pay-opt" data-method="bkash" onclick="selectPayment(this)">
+            <span class="picon">📱</span>
+            <span class="pname">bKash</span>
+            <span class="pdetail">Instant payment</span>
+          </div>
+        </div>
+      </div>
+      <button type="submit" class="btn-place" id="placeOrderBtn">Place Order</button>
+    </form>
+  </div>
+</div>
+
+<!-- REVIEWS -->
+<section id="reviews">
+  <div class="sec-wrap">
+    <div class="sec-label">Love It?</div>
+    <div class="sec-title">Customer Reviews</div>
+    <div class="reviews-grid" id="reviewsGrid"></div>
+
+    <div style="margin-top:80px;">
+      <div class="sec-label">Share Your Feedback</div>
+      <div class="add-review-box">
+        <h3>Write a Review</h3>
+        <form id="reviewForm" onsubmit="submitReview(event)">
+          <div class="rform-group">
+            <label>Rating</label>
+            <div class="star-select" id="starSelect"></div>
+          </div>
+          <div class="rform-group">
+            <label>Your Name *</label>
+            <input type="text" id="revName" required placeholder="Your name">
+          </div>
+          <div class="rform-group">
+            <label>Which Product? *</label>
+            <select id="revProduct" required>
+              <option value="">Select a product</option>
+            </select>
+          </div>
+          <div class="rform-group">
+            <label>Your Review *</label>
+            <textarea id="revText" required placeholder="Share your experience..." maxlength="300"></textarea>
+          </div>
+          <button type="submit" class="btn btn-yellow" style="width:100%;padding:14px;">Submit Review</button>
+        </form>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CONTACT -->
+<section id="contact">
+  <div class="sec-wrap">
+    <div class="sec-label">Questions?</div>
+    <div class="sec-title">Get in Touch</div>
+    <div class="channels">
+      <a href="https://wa.me/8801234567890" target="_blank" class="ch">
+        <div class="ch-icon ch-wa">💬</div>
+        <div>
+          <span class="ch-name">WhatsApp</span>
+          <span class="ch-val">+880 1234 567890</span>
+        </div>
+      </a>
+      <a href="https://www.facebook.com/fabricafold" target="_blank" class="ch">
+        <div class="ch-icon ch-fb">f</div>
+        <div>
+          <span class="ch-name">Facebook</span>
+          <span class="ch-val">Fabrica Fold</span>
+        </div>
+      </a>
+      <a href="https://www.instagram.com/fabricafold" target="_blank" class="ch">
+        <div class="ch-icon ch-ig">📷</div>
+        <div>
+          <span class="ch-name">Instagram</span>
+          <span class="ch-val">@fabricafold</span>
+        </div>
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-inner">
+    <div class="foot-logo" style="font-family:'Bebas Neue';font-size:22px;color:var(--yellow);letter-spacing:2px;">FABRICA FOLD</div>
+    <div class="foot-links">
+      <a href="#shop">Shop</a>
+      <a href="#reviews">Reviews</a>
+      <a href="#contact">Contact</a>
+    </div>
+    <div class="foot-note">© 2025 Fabrica Fold. All rights reserved.</div>
+  </div>
+</footer>
+
+<!-- FLOAT WA -->
+<a href="https://wa.me/8801234567890" target="_blank" class="float-wa">💬</a>
+
+<!-- TOAST -->
+<div class="toast" id="toast"></div>
+
+<script>
+// ═══════════════════════════════════════════════════════════════
+// PRODUCTS DATA
+// ═══════════════════════════════════════════════════════════════
+const products = [
+  {
+    id: 'narcos',
+    name: 'Narcos Tee',
+    price: 350,
+    tag: 'street',
+    badge: 'Street',
+    img: 'https://via.placeholder.com/400x500?text=Narcos+Tee',
+    imgBack: 'https://via.placeholder.com/400x500?text=Narcos+Back',
+    desc: 'Bold street aesthetic with iconic narcos-inspired print. Made from premium 100% cotton.',
+    stock: 'in-stock',
+    details: { Material: '100% Cotton', Size: 'S-XXL', Print: 'Screen Print' }
+  },
+  {
+    id: 'minimal',
+    name: 'Minimal Logo',
+    price: 350,
+    tag: 'minimal',
+    badge: 'Minimal',
+    img: 'https://via.placeholder.com/400x500?text=Minimal+Logo',
+    imgBack: 'https://via.placeholder.com/400x500?text=Minimal+Back',
+    desc: 'Clean, minimalist logo tee for everyday wear. Subtly bold.',
+    stock: 'in-stock',
+    details: { Material: '100% Cotton', Size: 'S-XXL', Print: 'Embroidery' }
+  },
+  {
+    id: 'dhaka',
+    name: 'Dhaka Street',
+    price: 350,
+    tag: 'street',
+    badge: 'Street',
+    img: 'https://via.placeholder.com/400x500?text=Dhaka+Street',
+    imgBack: 'https://via.placeholder.com/400x500?text=Dhaka+Back',
+    desc: 'Celebrating Dhaka streets with artistic print. Urban culture.',
+    stock: 'in-stock',
+    details: { Material: '100% Cotton', Size: 'S-XXL', Print: 'Screen Print' }
+  },
+  {
+    id: 'vintage',
+    name: 'Vintage Print',
+    price: 350,
+    tag: 'embroidery',
+    badge: 'Embroidery',
+    img: 'https://via.placeholder.com/400x500?text=Vintage+Print',
+    imgBack: 'https://via.placeholder.com/400x500?text=Vintage+Back',
+    desc: 'Retro vintage style with classic embroidery details.',
+    stock: 'low-stock',
+    details: { Material: '100% Cotton', Size: 'S-XXL', Print: 'Embroidery' }
+  }
+];
+
+let cart = [];
+let currentQty = 1;
+let currentProduct = null;
+let selectedRating = 0;
+let reviews = [
+  {
+    name: 'Ahmed Ali',
+    avatar: 'A',
+    rating: '⭐⭐⭐⭐⭐',
+    product: 'Narcos Tee',
+    text: 'Amazing quality! The print is crisp and the fit is perfect. Highly recommend.',
+    date: '2 days ago'
+  },
+  {
+    name: 'Fatima Khan',
+    avatar: 'F',
+    rating: '⭐⭐⭐⭐⭐',
+    product: 'Minimal Logo',
+    text: 'Love the minimalist design. Great price for the quality.',
+    date: '1 week ago'
+  },
+  {
+    name: 'Rashed Hasan',
+    avatar: 'R',
+    rating: '⭐⭐⭐⭐',
+    product: 'Dhaka Street',
+    text: 'Sick design! Fits true to size. Will buy again.',
+    date: '10 days ago'
+  }
+];
+
+// ═══════════════════════════════════════════════════════════════
+// INITIALIZE PAGE
+// ═══════════════════════════════════════════════════════════════
+document.addEventListener('DOMContentLoaded', function() {
+  renderProducts('all');
+  renderReviews();
+  populateReviewForm();
+  initStarRating();
+  loadCartFromStorage();
+});
+
+// ═══════════════════════════════════════════════════════════════
+// NAVIGATION & MENU
+// ═══════════════════════════════════════════════════════════════
+function toggleMenu() {
+  const menu = document.getElementById('mobileMenu');
+  menu.classList.toggle('open');
+}
+
+function closeMenu() {
+  document.getElementById('mobileMenu').classList.remove('open');
+}
+
+// ═══════════════════════════════════════════════════════════════
+// PRODUCTS & FILTERING
+// ═══════════════════════════════════════════════════════════════
+function renderProducts(filter = 'all') {
+  const grid = document.getElementById('productsGrid');
+  grid.innerHTML = '';
+  
+  let filtered = filter === 'all' ? products : products.filter(p => p.tag === filter);
+  
+  filtered.forEach(product => {
+    const card = document.createElement('div');
+    card.className = 'product-card';
+    card.innerHTML = `
+      <div class="product-badge">${product.badge}</div>
+      <div class="stock-badge ${product.stock}">${product.stock === 'in-stock' ? 'In Stock' : 'Low Stock'}</div>
+      <div class="product-imgs" onclick="openModal('${product.id}')">
+        <img class="img-front" src="${product.img}" alt="${product.name}">
+        <img class="img-back" src="${product.imgBack}" alt="${product.name} Back">
+      </div>
+      <div class="quick-btns">
+        <button class="btn-cart" onclick="quickAddCart('${product.id}')">ADD CART</button>
+        <button class="btn-wa" onclick="contactWhatsAppProduct('${product.id}')">💬</button>
+      </div>
+      <div class="product-info">
+        <div class="product-name">${product.name}</div>
+        <div class="product-detail">Premium tee for street culture</div>
+        <div class="product-footer">
+          <div class="product-price">৳${product.price}</div>
+        </div>
+      </div>
+    `;
+    grid.appendChild(card);
+  });
+  
+  document.getElementById('productCount').textContent = `${filtered.length} products`;
+}
+
+function filterProducts(tag, btn) {
+  document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  renderProducts(tag);
+}
+
+// ═══════════════════════════════════════════════════════════════
+// PRODUCT MODAL
+// ═══════════════════════════════════════════════════════════════
+function openModal(productId) {
+  const product = products.find(p => p.id === productId);
+  if (!product) return;
+  
+  currentProduct = product;
+  currentQty = 1;
+  
+  document.getElementById('modalBadge').textContent = product.badge;
+  document.getElementById('modalTitle').textContent = product.name;
+  document.getElementById('modalPrice').textContent = `৳${product.price}`;
+  document.getElementById('modalDesc').textContent = product.desc;
+  document.getElementById('modalImg').src = product.img;
+  document.getElementById('qtyVal').textContent = '1';
+  
+  // Stock indicator
+  const stockHTML = product.stock === 'in-stock'
+    ? '<div class="stock-dot green"></div><span class="stock-label">In Stock</span>'
+    : '<div class="stock-dot orange"></div><span class="stock-label">Low Stock</span>';
+  document.getElementById('modalStock').innerHTML = stockHTML;
+  
+  // Details
+  let detailsHTML = '';
+  for (let key in product.details) {
+    detailsHTML += `<div class="modal-details-row"><span>${key}</span><span>${product.details[key]}</span></div>`;
+  }
+  document.getElementById('modalDetails').innerHTML = detailsHTML;
+  
+  // Thumbnails
+  const thumbsHTML = `
+    <div class="thumb active" onclick="switchModalImg('${product.img}', this)"><img src="${product.img}"></div>
+    <div class="thumb" onclick="switchModalImg('${product.imgBack}', this)"><img src="${product.imgBack}"></div>
+  `;
+  document.getElementById('modalThumbs').innerHTML = thumbsHTML;
+  
+  document.getElementById('modalOverlay').classList.add('open');
+}
+
+function closeModal() {
+  document.getElementById('modalOverlay').classList.remove('open');
+}
+
+function switchModalImg(src, thumb) {
+  document.getElementById('modalImg').src = src;
+  document.querySelectorAll('.thumb').forEach(t => t.classList.remove('active'));
+  thumb.classList.add('active');
+}
+
+function incQty() {
+  currentQty++;
+  document.getElementById('qtyVal').textContent = currentQty;
+}
+
+function decQty() {
+  if (currentQty > 1) {
+    currentQty--;
+    document.getElementById('qtyVal').textContent = currentQty;
+  }
+}
+
+// ═══════════════════════════════════════════════════════════════
+// CART FUNCTIONS
+// ═══════════════════════════════════════════════════════════════
+function quickAddCart(productId) {
+  const product = products.find(p => p.id === productId);
+  if (product) {
+    addToCart(productId, 1);
+    showToast(`${product.name} added to cart!`);
+  }
+}
+
+function addToCartFromModal() {
+  if (currentProduct) {
+    addToCart(currentProduct.id, currentQty);
+    showToast(`${currentQty} × ${currentProduct.name} added to cart!`);
+    closeModal();
+  }
+}
+
+function addToCart(productId, qty) {
+  const product = products.find(p => p.id === productId);
+  if (!product) return;
+  
+  const existingItem = cart.find(item => item.id === productId);
+  
+  if (existingItem) {
+    existingItem.qty += qty;
+  } else {
+    cart.push({
+      id: productId,
+      name: product.name,
+      price: product.price,
+      img: product.img,
+      qty: qty
+    });
+  }
+  
+  saveCartToStorage();
+  updateCartDisplay();
+}
+
+function removeFromCart(productId) {
+  cart = cart.filter(item => item.id !== productId);
+  saveCartToStorage();
+  updateCartDisplay();
+}
+
+function updateCartItemQty(productId, newQty) {
+  const item = cart.find(item => item.id === productId);
+  if (item) {
+    item.qty = Math.max(1, newQty);
+    saveCartToStorage();
+    updateCartDisplay();
+  }
+}
+
+function updateCartDisplay() {
+  const cartItemsContainer = document.getElementById('cartItems');
+  const cartCount = document.getElementById('cartCount');
+  const cartTotal = document.getElementById('cartTotal');
+  
+  let totalPrice = 0;
+  let totalQty = 0;
+  
+  if (cart.length === 0) {
+    cartItemsContainer.innerHTML = `
+      <div class="cart-empty">
+        <div class="cart-empty-icon">🛒</div>
+        <p>Your cart is empty</p>
+      </div>
+    `;
+    cartCount.classList.remove('show');
+  } else {
+    cartItemsContainer.innerHTML = '';
+    cart.forEach(item => {
+      totalPrice += item.price * item.qty;
+      totalQty += item.qty;
+      
+      const itemHTML = `
+        <div class="cart-item">
+          <img class="cart-item-img" src="${item.img}" alt="${item.name}">
+          <div class="cart-item-info">
+            <div class="cart-item-name">${item.name}</div>
+            <div class="cart-item-price">৳${item.price}</div>
+            <div class="cart-item-qty">
+              <button class="ciq" onclick="updateCartItemQty('${item.id}', ${item.qty - 1})">−</button>
+              <span class="ciq-val">${item.qty}</span>
+              <button class="ciq" onclick="updateCartItemQty('${item.id}', ${item.qty + 1})">+</button>
+            </div>
+          </div>
+          <button class="cart-item-remove" onclick="removeFromCart('${item.id}')">✕</button>
+        </div>
+      `;
+      cartItemsContainer.innerHTML += itemHTML;
+    });
+    
+    if (totalQty > 0) {
+      cartCount.textContent = totalQty;
+      cartCount.classList.add('show');
+    }
+  }
+  
+  cartTotal.textContent = `৳${totalPrice}`;
+}
+
+function openCart() {
+  document.getElementById('cartOverlay').classList.add('open');
+  document.getElementById('cartSidebar').classList.add('open');
+}
+
+function closeCart() {
+  document.getElementById('cartOverlay').classList.remove('open');
+  document.getElementById('cartSidebar').classList.remove('open');
+}
+
+function saveCartToStorage() {
+  localStorage.setItem('fabricaCart', JSON.stringify(cart));
+}
+
+function loadCartFromStorage() {
+  const saved = localStorage.getItem('fabricaCart');
+  if (saved) {
+    try {
+      cart = JSON.parse(saved);
+      updateCartDisplay();
+    } catch (e) {
+      console.error('Error loading cart:', e);
+    }
+  }
+}
+
+// ═══════════════════════════════════════════════════════════════
+// CHECKOUT
+// ═══════════════════════════════════════════════════════════════
+let selectedPaymentMethod = 'cod';
+
+function selectPayment(element) {
+  document.querySelectorAll('.pay-opt').forEach(opt => opt.classList.remove('active'));
+  element.classList.add('active');
+  selectedPaymentMethod = element.dataset.method;
+}
+
+function openCheckout() {
+  if (cart.length === 0) {
+    showToast('Your cart is empty!');
+    return;
+  }
+  
+  // Populate checkout items
+  let itemsHTML = '';
+  let total = 0;
+  cart.forEach(item => {
+    itemsHTML += `<div class="co-item"><span>${item.qty}× ${item.name}</span><span>৳${item.price * item.qty}</span></div>`;
+    total += item.price * item.qty;
+  });
+  
+  document.getElementById('checkoutItems').innerHTML = itemsHTML;
+  document.getElementById('checkoutTotal').textContent = `৳${total}`;
+  
+  document.getElementById('checkoutOverlay').classList.add('open');
+  closeCart();
+}
+
+function closeCheckout() {
+  document.getElementById('checkoutOverlay').classList.remove('open');
+  document.getElementById('checkoutForm').reset();
+}
+
+document.getElementById('checkoutForm')?.addEventListener('submit', function(e) {
+  e.preventDefault();
+  
+  const name = document.getElementById('coName').value;
+  const phone = document.getElementById('coPhone').value;
+  const address = document.getElementById('coAddress').value;
+  
+  if (!name || !phone || !address) {
+    showToast('Please fill in all fields!');
+    return;
+  }
+  
+  let total = 0;
+  let items = '';
+  cart.forEach(item => {
+    items += `${item.qty}x ${item.name} - ৳${item.price * item.qty}\n`;
+    total += item.price * item.qty;
+  });
+  
+  if (selectedPaymentMethod === 'cod') {
+    const message = `New Order:\n\nCustomer: ${name}\nPhone: ${phone}\nAddress: ${address}\n\nItems:\n${items}\nTotal: ৳${total}\n\nPayment: Cash on Delivery`;
+    const encodedMsg = encodeURIComponent(message);
+    window.open(`https://wa.me/8801234567890?text=${encodedMsg}`, '_blank');
+  } else {
+    const message = `bKash Payment Required:\n\nCustomer: ${name}\nPhone: ${phone}\n\nItems:\n${items}\nTotal: ৳${total}`;
+    const encodedMsg = encodeURIComponent(message);
+    window.open(`https://wa.me/8801234567890?text=${encodedMsg}`, '_blank');
+  }
+  
+  cart = [];
+  saveCartToStorage();
+  updateCartDisplay();
+  closeCheckout();
+  showToast('Order placed! Redirecting to WhatsApp...');
+});
+
+// ═══════════════════════════════════════════════════════════════
+// REVIEWS
+// ═══════════════════════════════════════════════════════════════
+function renderReviews() {
+  const grid = document.getElementById('reviewsGrid');
+  grid.innerHTML = '';
+  
+  reviews.forEach(review => {
+    const card = document.createElement('div');
+    card.className = 'review-card';
+    card.innerHTML = `
+      <div class="review-top">
+        <div class="review-avatar">${review.avatar}</div>
+        <div class="review-meta">
+          <div class="review-name">${review.name}</div>
+          <div class="review-date">${review.date}</div>
+        </div>
+      </div>
+      <div class="review-stars">${review.rating}</div>
+      <div class="review-product">${review.product}</div>
+      <div class="review-text">${review.text}</div>
+    `;
+    grid.appendChild(card);
+  });
+}
+
+function initStarRating() {
+  const starSelect = document.getElementById('starSelect');
+  starSelect.innerHTML = '';
+  
+  for (let i = 1; i <= 5; i++) {
+    const btn = document.createElement('button');
+    btn.type = 'button';
+    btn.className = 'star-btn';
+    btn.textContent = '⭐';
+    btn.onclick = (e) => {
+      e.preventDefault();
+      selectedRating = i;
+      updateStarDisplay();
+    };
+    starSelect.appendChild(btn);
+  }
+}
+
+function updateStarDisplay() {
+  const stars = document.querySelectorAll('.star-btn');
+  stars.forEach((star, idx) => {
+    if (idx < selectedRating) {
+      star.classList.add('lit');
+    } else {
+      star.classList.remove('lit');
+    }
+  });
+}
+
+function populateReviewForm() {
+  const select = document.getElementById('revProduct');
+  products.forEach(product => {
+    const option = document.createElement('option');
+    option.value = product.name;
+    option.textContent = product.name;
+    select.appendChild(option);
+  });
+}
+
+function submitReview(event) {
+  event.preventDefault();
+  
+  const name = document.getElementById('revName').value;
+  const product = document.getElementById('revProduct').value;
+  const text = document.getElementById('revText').value;
+  
+  if (!name || !product || !text || selectedRating === 0) {
+    showToast('Please complete all fields!');
+    return;
+  }
+  
+  const rating = '⭐'.repeat(selectedRating);
+  
+  const newReview = {
+    name: name,
+    avatar: name.charAt(0).toUpperCase(),
+    rating: rating,
+    product: product,
+    text: text,
+    date: 'just now'
+  };
+  
+  reviews.unshift(newReview);
+  renderReviews();
+  
+  document.getElementById('reviewForm').reset();
+  selectedRating = 0;
+  updateStarDisplay();
+  
+  showToast('Thank you for your review! ⭐');
+}
+
+// ═══════════════════════════════════════════════════════════════
+// UTILITIES
+// ═══════════════════════════════════════════════════════════════
+function contactWhatsApp() {
+  window.open('https://wa.me/8801234567890?text=Hi%20I%20need%20help!', '_blank');
+}
+
+function contactWhatsAppProduct(productId) {
+  const product = products.find(p => p.id === productId);
+  const msg = `Hi, I'm interested in the ${product.name}`;
+  window.open(`https://wa.me/8801234567890?text=${encodeURIComponent(msg)}`, '_blank');
+}
+
+function sendCartWhatsApp() {
+  if (cart.length === 0) {
+    showToast('Your cart is empty!');
+    return;
+  }
+  
+  let items = '';
+  let total = 0;
+  cart.forEach(item => {
+    items += `${item.qty}x ${item.name} - ৳${item.price * item.qty}\n`;
+    total += item.price * item.qty;
+  });
+  
+  const message = `I want to order:\n\n${items}\nTotal: ৳${total}`;
+  window.open(`https://wa.me/8801234567890?text=${encodeURIComponent(message)}`, '_blank');
+}
+
+function showToast(message) {
+  const toast = document.getElementById('toast');
+  toast.textContent = message;
+  toast.classList.add('show');
+  
+  setTimeout(() => {
+    toast.classList.remove('show');
+  }, 3000);
+}
+</script>
+
+</body>
+</html>
